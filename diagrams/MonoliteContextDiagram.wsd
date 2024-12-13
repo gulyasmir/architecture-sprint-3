@@ -1,0 +1,33 @@
+@startuml
+' Define C4 model styles
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 5
+}
+
+title Диаграмма контекста: Монолитное приложение
+
+' Пользователи
+actor :User: as  "Пользователь" 
+
+' Монолитное приложение
+rectangle MonolithApp as "Монолитное приложение" {
+  [REST API]
+  [Бизнес-логика]
+}
+
+' Внешние системы
+rectangle TemperatureSensor as "Датчики температуры" {
+  [Передача температуры]
+}
+
+' База данных
+database Database as "PostgreSQL"
+
+' Взаимодействия
+User --> MonolithApp : Запросы на управление отоплением\nПросмотр температуры
+MonolithApp --> TemperatureSensor : Запрос температуры\nУправление отоплением
+MonolithApp --> Database : Чтение и запись данных о\nсостоянии устройств
+
+@enduml
