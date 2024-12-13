@@ -1,0 +1,22 @@
+@startuml
+!include <c4/C4_Component>
+
+title  Диаграмма на уровне компонентов для микросервиса системы отопления Heating_System_Service
+
+Container(heating_system_service, "Сервис системы отопления", "Java, Spring Boot", "Управляет системой отопления") {
+    Component(api, heating_system_service, "API", "REST API, обрабатывает запросы от API Gateway")
+    Component(command_handler, heating_system_service, "Обработчик команд", "Обрабатывает команды управления системой отопления (включить, выключить, установить температуру)")
+    Component(state_manager, heating_system_service, "Менеджер состояния", "Управляет состоянием системы отопления")
+    Component(db_access_layer, heating_system_service, "Уровень доступа к БД", "Взаимодействует с базой данных для получения и сохранения состояния отопления")
+    Component(event_publisher, heating_system_service, "Публикатор событий", "Публикует события в Kafka")
+    Component(business_logic, heating_system_service, "Бизнес-логика", "Реализует логику работы отопления, например, проверка температуры и управление состоянием")
+
+    Rel(api, command_handler, "Вызывает", "REST")
+    Rel(command_handler, state_manager, "Изменяет состояние", "")
+    Rel(state_manager, db_access_layer, "Сохраняет состояние", "")
+    Rel(state_manager, event_publisher, "Публикует событие (изменение состояния)", "")
+    Rel(business_logic, state_manager, "Вызывает изменение состояния", "")
+    Rel(business_logic, db_access_layer, "Запрашивает данные", "")
+}
+
+@enduml

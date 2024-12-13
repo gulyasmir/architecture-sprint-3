@@ -1,0 +1,50 @@
+@startuml
+package "Heating System Service" {
+   title Диаграмма на уровне кода (классов) для управления отоплением Heating_System_Service
+
+    class HeatingSystemController {
+        +turnOnHeating(systemId: Long): void
+        +turnOffHeating(systemId: Long): void
+        +setTemperature(systemId: Long, temperature: double): void
+        +getCurrentTemperature(systemId: Long): double
+    }
+
+    class HeatingSystemService {
+        +turnOnHeating(systemId: Long): void
+        +turnOffHeating(systemId: Long): void
+        +setTemperature(systemId: Long, temperature: double): void
+        +getCurrentTemperature(systemId: Long): double
+    }
+
+    class CommandHandler {
+        +processTurnOnCommand(systemId: Long): void
+        +processTurnOffCommand(systemId: Long): void
+        +processSetTemperatureCommand(systemId: Long, temperature: double): void
+    }
+
+    class StateManager {
+        +updateState(systemId: Long, state: String): void
+        +getState(systemId: Long): String
+    }
+
+    class HeatingSystemRepository {
+        +save(system: HeatingSystem): void
+        +findById(systemId: Long): HeatingSystem
+    }
+
+    class HeatingSystem {
+        +Long id
+        +boolean isOn
+        +double currentTemperature
+        +double targetTemperature
+    }
+
+    HeatingSystemController --> HeatingSystemService : вызовы
+    HeatingSystemService --> CommandHandler : делегирует обработку команд
+    HeatingSystemService --> StateManager : управление состоянием 
+    HeatingSystemService --> HeatingSystemRepository : сохраняет/извлекает состояние системы
+    CommandHandler --> StateManager : изменяет состояние системы отопления
+    HeatingSystemRepository --> HeatingSystem : хранит данные
+
+}
+@enduml

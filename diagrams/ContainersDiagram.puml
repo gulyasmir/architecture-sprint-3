@@ -1,0 +1,107 @@
+@startuml
+!define RECTANGLE class
+
+title  Диаграмма на уровне контейнеров
+
+' Контейнеры
+RECTANGLE API_Gateway {
+  [API Gateway] 
+  : REST API; 
+  - Единственная точка входа в систему. Управление устройствами
+}
+
+RECTANGLE Heating_System_Service {
+  [Heating System Service]
+  : REST API, Business Logic;
+  - Управление отоплением
+}
+
+RECTANGLE Lighting_System_Service {
+  [Lighting System Service]
+  : REST API, Business Logic;
+  - Управление освещением
+}
+
+RECTANGLE Temperature_Monitoring_Service {
+  [Temperature Monitoring Service]
+  : REST API, Business Logic;
+  - Мониторинг температуры
+}
+
+RECTANGLE Notification_Service {
+  [Notification Service]
+  : REST API, Business Logic;
+  - Уведомления для пользователей
+}
+
+RECTANGLE Automation_Service {
+  [Automation Service]
+  : REST API, Business Logic;
+  - Настройка автоматических сценариев
+}
+
+' Базы данных
+RECTANGLE Heating_DB {
+  [Heating Database] 
+  : PostgreSQL; 
+  - Данные о системе отопления
+}
+
+RECTANGLE Lighting_DB {
+  [Lighting Database] 
+  : PostgreSQL; 
+  - Данные о системе освещения
+}
+
+RECTANGLE Temperature_DB {
+  [Temperature Database] 
+  : PostgreSQL;
+  - Данные о температуре
+}
+
+RECTANGLE Automation_DB {
+  [Automation Database] 
+  : PostgreSQL;
+  - Данные о автоматических сценариях
+}
+
+
+RECTANGLE Notification_DB {
+  [Automation Database] 
+  :  Clickhouse;
+  - Данные о уведомлениях (когда и какие уведомления были отправлены)
+}
+
+' Шина данных (Kafka)
+RECTANGLE Kafka_Broker {
+  [Kafka Broker]
+  : Message Broker;
+  - Асинхронный обмен сообщениями
+}
+
+' Взаимодействия
+API_Gateway -down-> Heating_System_Service : "API Calls (REST)"
+API_Gateway -down-> Lighting_System_Service : "API Calls (REST)"
+API_Gateway -down-> Temperature_Monitoring_Service : "API Calls (REST)"
+API_Gateway -down-> Notification_Service : "API Calls (REST)"
+API_Gateway -down-> Automation_Service : "API Calls (REST)"
+
+Heating_System_Service -down-> Heating_DB : "Read/Write Data"
+Lighting_System_Service -down-> Lighting_DB : "Read/Write Data"
+Temperature_Monitoring_Service -down-> Temperature_DB : "Read/Write Data"
+Automation_Service -down-> Automation_DB : "Read/Write Data"
+Notification_Service -down-> Notification_DB : "Read/Write Data"
+
+Heating_System_Service -down-> Kafka_Broker : "Publish Events"
+Lighting_System_Service -down-> Kafka_Broker : "Publish Events"
+Temperature_Monitoring_Service -down-> Kafka_Broker : "Publish Events"
+Notification_Service -down-> Kafka_Broker : "Consume Events"
+Automation_Service -down-> Kafka_Broker : "Consume Events"
+
+Kafka_Broker -down-> Heating_System_Service : "Consume Events"
+Kafka_Broker -down-> Lighting_System_Service : "Consume Events"
+Kafka_Broker -down-> Temperature_Monitoring_Service : "Consume Events"
+Kafka_Broker -down-> Notification_Service : "Consume Events"
+Kafka_Broker -down-> Automation_Service : "Consume Events"
+
+@enduml

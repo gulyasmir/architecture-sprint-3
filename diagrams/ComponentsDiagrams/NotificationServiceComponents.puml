@@ -1,0 +1,22 @@
+@startuml
+!include <c4/C4_Component>
+
+title  Диаграмма на уровне компонентов для микросервиса уведомлений для пользователей Notification_Service
+
+Container(notification_service, "Сервис уведомлений для пользователей", "Java, Spring Boot", "Создает уведомления пользователей о различных событиях") {
+    Component(api, notification_service, "API", "REST API, обрабатывает запросы от API Gateway")
+    Component(command_handler, notification_service, "Обработчик команд", "Обрабатывает команды ")
+    Component(state_manager, notification_service, "Менеджер состояния", "Управляет состоянием сервиса уведомления пользователей ")
+    Component(db_access_layer, notification_service, "Уровень доступа к БД", "Взаимодействует с базой данных для получения и сохранения данных")
+    Component(event_publisher, notification_service, "Публикатор событий", "Публикует события в Kafka")
+    Component(business_logic, notification_service, "Бизнес-логика", "Реализует логику работы ")
+
+    Rel(api, command_handler, "Вызывает", "REST")
+    Rel(command_handler, state_manager, "Изменяет состояние", "")
+    Rel(state_manager, db_access_layer, "Сохраняет состояние", "")
+    Rel(state_manager, event_publisher, "Публикует событие (изменение состояния)", "")
+    Rel(business_logic, state_manager, "Вызывает изменение состояния", "")
+    Rel(business_logic, db_access_layer, "Запрашивает данные", "")
+}
+
+@enduml
