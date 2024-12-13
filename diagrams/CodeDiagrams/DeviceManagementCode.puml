@@ -1,0 +1,35 @@
+@startuml
+package "Device State Manager" {
+
+    title Диаграмма на уровне кода (классов) для управления устройствами DeviceManagement
+
+    class DeviceController {
+        +sendCommand(deviceId: String, command: String): Response
+        +getDeviceState(deviceId: String): DeviceState
+    }
+
+    class CommandHandler {
+        +validateCommand(command: String): Boolean
+        +dispatchCommand(deviceId: String, command: String): Response
+    }
+
+    class DeviceStateService {
+        +updateDeviceState(deviceId: String, newState: DeviceState)
+        +getCurrentState(deviceId: String): DeviceState
+    }
+
+    class EventPublisher {
+        +publishEvent(event: DeviceEvent)
+    }
+
+    class DeviceRepository {
+        +save(device: Device)
+        +findById(deviceId: String): Device
+    }
+
+    DeviceController --> CommandHandler :  делегирует обработку команд
+    CommandHandler --> DeviceStateService :управление состоянием 
+    DeviceStateService --> DeviceRepository : сохраняет/извлекает состояние системы
+    CommandHandler --> EventPublisher : публикует события
+}
+@enduml

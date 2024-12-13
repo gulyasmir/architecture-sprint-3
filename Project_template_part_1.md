@@ -256,10 +256,10 @@ TemperatureSensor: представляет датчики температур�
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-Диаграмма контекста монолитного приложения представлена в файле ContextDiagram.wsd текущего проекта
+Диаграмма контекста монолитного приложения представлена в файле MonoliteContextDiagram.puml текущего проекта
 
 ```markdown
-[ContextDiagram](./diagrams/MonoliteContextDiagram.wsd)
+[MonoliteContextDiagram](./diagrams/MonoliteContextDiagram.puml)
 ```
 
 # Задание 2. Проектирование микросервисной архитектуры
@@ -268,16 +268,67 @@ TemperatureSensor: представляет датчики температур�
 
 **Диаграмма контейнеров (Containers)**
 
-Добавьте диаграмму.
+```markdown
+[ContainersDiagram](./diagrams/ContainersDiagram.puml)
+```
 
 **Диаграмма компонентов (Components)**
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+1. Диаграмма для микросервиса управления устройствами API_Gateway Device Management
+
+```markdown
+[APIGatewayDeviceManagementComponents](./diagrams/ComponentsDiagrams/APIGatewayDeviceManagementComponents.puml)
+```
+
+2. Диаграмма для микросервиса настройка автоматических сценариев Automation_Service
+
+```markdown
+[AutomationServiceComponents](./diagrams/ComponentsDiagrams/AutomationServiceComponents.puml)
+```
+
+3.  Диаграмма для микросервиса системы отопления Heating_System_Service
+
+```markdown
+[HeatingSystemComponents](./diagrams/ComponentsDiagrams/HeatingSystemComponents.puml)
+```
+
+4. Диаграмма для микросервиса управления освещением Lighting_System_Service
+```markdown
+[LightingSystemComponents](./diagrams/ComponentsDiagrams/LightingSystemComponents.puml)
+```
+
+5. Диаграмма для микросервиса уведомлений для пользователей Notification_Service
+
+```markdown
+[NotificationServiceComponents](./diagrams/ComponentsDiagrams/NotificationServiceComponents.puml)
+```
+
+6. Диаграмма для микросервиса мониторинга температуры Temperature_Monitoring_Service
+
+```markdown
+[TemperatureMonitoringComponents](./diagrams/ComponentsDiagrams/TemperatureMonitoringComponents.puml)
+```
+
 
 **Диаграмма кода (Code)**
 
-Добавьте одну диаграмму или несколько.
+1. Диаграмма на уровне кода (классов) для управления устройствами DeviceManagement
+
+```markdown
+[DeviceManagementCode](./diagrams/CodeDiagrams/DeviceManagementCode.puml)
+```
+
+2. Диаграмма на уровне кода (классов) для управления отоплением Heating_System_Service
+
+```markdown
+[HeatingSystemCode](./diagrams/CodeDiagrams/HeatingSystemCode.puml)
+```
+
 
 # Задание 3. Разработка ER-диаграммы
 
-Добавьте сюда ER-диаграмму. Она должна отражать ключевые сущности системы, их атрибуты и тип связей между ними.
+Диаграмма находится в текущем проекте, в папке diagrams
+
+```markdown
+[ER-diagram.puml](./diagrams/ER-diagram.puml)
+```

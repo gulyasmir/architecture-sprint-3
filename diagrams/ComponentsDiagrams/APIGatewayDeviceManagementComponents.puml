@@ -1,0 +1,25 @@
+@startuml
+!include <c4/C4_Component>
+
+title  Диаграмма на уровне компонентов для микросервиса управления устройствами API_Gateway
+
+System_Boundary(c1, "Управление Устройствами") {
+    Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Маршрутизация и балансировка нагрузки")
+    Container(device_management_service, "Сервис Управления Устройствами DeviceManagement", "Spring Boot", "Обработка команд и управление состоянием устройств") {
+        Component(device_controller, device_management_service, "Контроллер Устройств", "Java, Spring REST Controller", "Обрабатывает запросы от API Gateway")
+        Component(device_state_manager, device_management_service, "Менеджер Состояния Устройств", "Java, Spring Service", "Управляет состоянием устройств")
+        Component(device_event_publisher, device_management_service, "Публикатор Событий Устройств", "Java, Spring Kafka", "Публикует события в Kafka")
+        Component(device_repository, device_management_service, "Репозиторий Устройств", "Java, Spring Data JPA", "Взаимодействует с базой данных")
+    }
+    ContainerDb(device_db, "База данных состояний устройств", "PostgreSQL", "Хранит состояния устройств")
+
+    Rel(api_gateway, device_controller, "Передает запросы", "HTTP")
+    Rel(device_controller, device_state_manager, "Вызывает", "")
+    Rel(device_state_manager, device_repository, "Запрашивает/сохраняет состояние", "")
+    Rel(device_state_manager, device_event_publisher, "Публикует событие", "")
+    Rel(device_repository, device_db, "Взаимодействует", "JDBC")
+    Rel(device_event_publisher, "Kafka", "Публикует события асинхронно", "Kafka")
+
+}
+
+@enduml
