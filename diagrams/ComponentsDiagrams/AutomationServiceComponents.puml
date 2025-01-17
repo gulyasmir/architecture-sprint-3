@@ -1,0 +1,22 @@
+@startuml
+!include <c4/C4_Component>
+
+title  Диаграмма на уровне компонентов для микросервиса настройка автоматических сценариев Automation_Service
+
+Container(automation_service, "Сервис настройки автоматических сценариев", "Java, Spring Boot", "Позволяет создавать автоматические сценарии управления умным домом.") {
+    Component(api, automation_service, "API", "REST API, обрабатывает запросы от API Gateway")
+    Component(command_handler, automation_service, "Обработчик команд", "Обрабатывает команды")
+    Component(state_manager, automation_service, "Менеджер состояния", "Управляет состоянием системы")
+    Component(db_access_layer, automation_service, "Уровень доступа к БД", "Взаимодействует с базой данных")
+    Component(event_publisher, automation_service, "Публикатор событий", "Публикует события в Kafka")
+    Component(business_logic, automation_service, "Бизнес-логика", "Реализует логику работы. Какие сервисы и при каких условиях будут задействованы - например, включить освещение двора вечером после 18.00, или включить отопление если температура в доме ниже 18 градусов.")
+
+    Rel(api, command_handler, "Вызывает", "REST")
+    Rel(command_handler, state_manager, "Изменяет состояние", "")
+    Rel(state_manager, db_access_layer, "Сохраняет состояние", "")
+    Rel(state_manager, event_publisher, "Публикует событие (изменение состояния)", "")
+    Rel(business_logic, state_manager, "Вызывает изменение состояния", "")
+    Rel(business_logic, db_access_layer, "Запрашивает данные", "")
+}
+
+@enduml
